@@ -1,0 +1,1045 @@
+<!-- I put comments here for you guys to learn html & javascript quickly. Refer to https://www.w3schools.com/tags/default.asp for "tags" in html.
+     G. S. Lee and S. J. Shyu Ver. 0.5 2019/03/08
+-->
+<!DOCTYPE html> <!--The <!DOCTYPE> declaration must be the very first thing in your HTML document, before the <html> tag.
+					The <!DOCTYPE> declaration is not an HTML tag; it is an instruction to the web browser about what version of HTML the page is written in.
+					Tip: Always add the <!DOCTYPE> declaration to your HTML documents, so that the browser knows what type of document to expect.
+				-->
+<html>  <!--The <html> tag tells the browser that this is an HTML document.
+			The <html> tag represents the root of an HTML document.
+			The <html> tag is the container for all other HTML elements (except for the <!DOCTYPE> tag).
+		-->
+	<head>	<!--The <head> element is a container for all the head elements.
+				The <head> element can include a title for the document, scripts, styles, meta information, and more.
+			-->
+		<!-- The <title> element defines the title of the document, and is required in all HTML/XHTML documents.  -->	
+			<!-- 為了數學式 -->
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>MathJax Example</title>
+			<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+			<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+			<title> 
+				Permutations and Combinations by S. J. Shyu  Ver. 0.3 2019/03/08 
+		</title>
+		 <!-- The <style> tag is used to define style information for an HTML document.
+					 Inside the <style> element you specify how HTML elements should render in a browser.
+					 Each HTML document can contain multiple <style> tags.
+				-->
+			<!-- Some specific properties of the tags: body, table and td are re-defined (as needed) as below. -->
+					<!-- font-family: consolas;  -->		
+		<style>
+			body 	{ 	
+						font-family: Times;
+						position: relative;
+   						margin: 0;
+						padding: 0;
+						height: 100vh;
+					}
+			body::before {
+						content: "";
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+						background-image: url('kirby-back.jpg');
+						background-size: cover;
+						background-position: center;
+						background-repeat: no-repeat;
+						opacity: 0.2;
+						z-index: -1;
+					}
+			table 	{	text-align: center;
+						border-collapse: collapse;
+						margin-bottom: 20px;
+						margin: 20px auto;
+					}
+			th, td 	{	padding: 5px;
+						border: 1px solid #dddddd;
+					}
+			input[type="number"] 	{	width: 60px;
+									}
+			caption {
+				font-size: 1.5em;
+				font-weight: bold;
+				margin-bottom: 10px;
+				text-align: center;
+			}
+			* {
+				cursor: url('star-cursor-small.png'), auto;
+			}
+
+			.firework {
+				position: absolute;
+				width: 5px;
+				height: 5px;
+				border-radius: 50%;
+				background-color: #ff5722;
+				animation: explode 1s ease-out forwards;
+			}
+			@keyframes explode {
+				0% {
+					transform: scale(1);
+					opacity: 1;
+				}
+				100% {
+					transform: translate(var(--x), var(--y)) scale(0.5);
+					opacity: 0;
+				}
+			}
+			
+		</style>
+	</head>
+	<body>	<!-- The <body> tag defines the document's body.
+				 The <body> element contains all the contents of an HTML document, such as text, hyperlinks, images, tables, lists, etc.
+			-->
+		<table  bgcolor="3466B3"; style="text-align:center;">   
+			<tr>
+			<td rowspan="3"><img id="myImage" src="./kirby.png" align="center" width="75" height="75">
+			
+			<!-- <td rowspan="3"><img id="myImage" src="https://lh3.googleusercontent.com/wgbzC9NQmY0oA4RlQe56A51JBsZozuY0UWBvTCaWUGS12BWsxRbkAbGkeTb8cu81mVcJPRI4Dv6pxlo4d0qn48idFY4nK_n9-BV7ApnD32hyz2yIIE6V=w572" align="center" width="76" height="50">
+			-->
+			</td>
+
+			</tr> 
+			<tr>
+				<td style="width: 700px; font-size: 25pt;"> <b style="color: white;">Permutations and Combinations</b> <br> <font size="4" color="#E2E2E2">Student ID: 313708003 &emsp; Name: Hsuan Yu Hung &emsp; Date: 2024/12/25
+				</td>
+			</tr>
+		</table>			
+			
+		<table>	<!-- The <table> tag defines an HTML table.
+					 An HTML table consists of the <table> element and one or more <tr>, <th>, and <td> elements.
+					 The <tr> element defines a table row, the <th> element defines a table header, and the <td> element defines a table cell.
+				-->
+			<tr  bgcolor="3466B3"; style="color: white; height: 50px; font-size: 13pt;">
+				<th>Formula
+				</th>
+				<th><label><i>n</i> = </label>
+					<input type="number" id="n" value="7" min="0">
+					<label><i>r</i> = </label>
+					<input type="number" id="r" value="3" min="0">
+					<label><i>m</i> = </label>
+					<input type="number" id="m" value="9" min="1">
+					<!-- <label><i>n</i> = </label>
+					<input type="number" id="n" value="3" min="0"> -->
+				</th>
+				<th><button type="button" onclick="computeAll(); createFireworks(this)">Compute All</button>
+				</th>	
+				<th>Order relevant
+				</th>
+				<th>Repetition
+				</th>				
+				<th>Memo
+				</th>								
+			</tr>
+<!--		<tr>
+				<td>
+					<label>n = </label>
+					<input type="number" id="n" value="7" min="0">
+				</td>
+				<td>
+					<label>r = </label>
+					<input type="number" id="r" value="3" min="0">
+				</td>
+				<td>
+					<button type="button" onclick="clickAll()">計算全部</button>
+				</td>
+			</tr>
+-->			
+			<tr style="background: #FFFFFF;">
+				<td>
+					<label><i>P</i>(<i>n</i>, <i>r</i>)</label>
+				</td>
+				<td>
+					<!-- The <span> tag is used to group inline-elements in a document.
+						 The <span> tag provides no visual change by itself.
+						 The <span> tag provides a way to add a hook to a part of a text or a part of a document.
+					-->
+					<span id="resPermutation"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickPerm()">Permutation</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					# Permutations of size <i>r</i> from <i>n</i> distinct objects
+				</td>
+			</tr>
+			<tr style="background: #EBEBEB;">
+				<td>
+					<label><i>C</i>(<i>n</i>, <i>r</i>)</label>
+				</td>
+				<td>
+					<span id="resCombination"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickComb()">Combination</button>
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					# Selections/Combinations of size <i>r</i> from <i>n</i> distinct objects
+				</td>
+			</tr>
+			<tr style="background: #FFFFFF;">
+				<td>
+					<label><i>n<sup>r</sup></i></label>
+				</td>
+				<td>
+					<span id="resArrangement"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickArra()">Arrangement with repetition</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					yes
+				</td>
+				<td align="left">
+					# Arrangements with repetition of size <i>r</i> from <i>n</i> distinct objects
+				</td>
+			</tr>
+			<tr style="background: #EBEBEB;">
+				<td>
+					<label><i>C</i>(<i>r</i>+<i>n</i>-1, <i>r</i>)</label>
+				</td>
+				<td>
+					<span id="resSelectrofn"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickSele()">Selection with repetition</button>
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					yes
+				</td>
+				<td align="left">
+					# Selections with repetition of size <i>r</i> from <i>n</i> distinct objects
+				</td>
+			</tr>
+			<!-- Catalan -->
+			<tr style="background: #FFFFFF;">
+				<td>
+					<label><i>C<sub>n</sub></i></label>
+				</td>
+				<td>
+					<span id="resCatalan"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickCata()">Catalan</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					# The first <i>n</i> Catalan with respect to <i>n</i>
+				</td>
+			</tr>
+			<!-- Triangular -->
+			<tr style="background: #EBEBEB;">
+				<td>
+					<label><i>T<sub>n</sub></i></label>
+				</td>
+				<td>
+					<span id="resTriangular"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickTria()">Triangular</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					# The first <i>n</i> Triangular with respect to <i>n</i>
+				</td>
+			</tr>
+			<!-- Harmonic -->
+			<tr style="background: #FFFFFF;">
+				<td>
+					<label><i>H<sub>n</sub></i></label>
+				</td>
+				<td>
+					<span id="resHarmonic"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickHarm()">Harmonic</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					# The first <i>n</i> Harmonic with respect to <i>n</i>
+				</td>
+			</tr>
+			<!-- Fibonacci -->
+			<tr style="background: #EBEBEB;">
+				<td>
+					<label><i>F<sub>n</sub></i></label>
+				</td>
+				<td>
+					<span id="resFibonacci"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickFibo()">Fibonacci</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					# The first <i>n</i> Fibonacci with respect to <i>n</i>
+				</td>
+			</tr>
+			<!-- Lucas -->
+			<tr style="background: #FFFFFF;">
+				<td>
+					<label><i>L<sub>n</sub></i></label>
+				</td>
+				<td>
+					<span id="resLucas"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickLuca()">Lucas</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					# The first <i>n</i> Lucas with respect to <i>n</i>
+				</td>
+			</tr>
+
+			<!-- Eulerian -->
+			<tr style="background: #EBEBEB;">
+				<td>
+					<label><i>a</i>(<i>m</i>, <i>k</i>)</label>
+				</td>
+				<td>
+					<span id="resEulerian"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickEule()">Eulerian</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					# Eulerian numbers with respect to <i>m, k</i> for 
+					\[ \small
+					0 \leq k \leq m-1 \quad (\text{i.e., } a(m, 0), a(m, 1), \dots, a(m, m-1))
+					\]
+				</td>
+			</tr>
+			<!-- Stirling -->
+			<tr style="background: #FFFFFF;">
+				<td>
+					<label><i>S</i>(<i>m</i>, <i>n</i>)</label>
+				</td>
+				<td>
+					<span id="resStirling"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickStir()">Stirling</button>
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					# Stirling number of the second kind with respect to <i>m, n</i> for 
+					\[ \small
+					1 \leq n \leq m \quad (\text{i.e., } S(m, 1), S(m, 2), \dots, S(m, n))
+					\]
+				</td>
+			</tr>
+		</table>
+		<!-- BONUS -->	
+		<table>
+			<caption style="text-decoration: underline; color: #3466B3; font-size: 36px; font-weight: bold;">BONUS</caption>
+			<tr  bgcolor="3466B3"; style="color: white; height: 60px; font-size: 13pt;">
+				<th>Number of Distributions
+				</th>
+				<th><label><i>m</i> = </label>
+					<input type="number" id="m_b" value="6" min="0">
+					<label><i>n</i> = </label>
+					<input type="number" id="n_b" value="4" min="0">
+				</th>
+				<th><button type="button" onclick="computeAll_bonus(); createFireworks(this)">Compute All</button>
+				</th>
+				<th>Distinct Objects <label>(<i>m</i>)</label>
+				</th>
+				<th>Distinct Containers <label>(<i>n</i>)</label>
+				</th>
+				<th>Some Empty Containers
+				</th>
+				<th>Interpretation
+				</th>
+			</tr>
+			<!-- contents -->	
+			<tr style="background: #FFFFFF;">
+				<td>
+					<label><i>n<sup>m</sup></i></label>
+				</td>
+				<td>
+					<span id="resCartesian"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickCart()">Cartesian</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					yes
+				</td>
+				<td align="left">
+					Each of the <i>m</i> distinct objects may be distributed into any of the <i>n</i> distinct containers
+				</td>
+			</tr>
+			<tr style="background: #EBEBEB;">
+				<td>
+					<label><i>n</i><i>!</i><i>S</i>(<i>m</i>, <i>n</i>)</label>
+				</td>
+				<td>
+					<span id="resOnto"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickOnto()">Onto</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					Each of the <i>m</i> distinct object may be distributed onto any of the <i>n</i> distinct containers with no containers empty
+				</td>
+			</tr>
+			<tr style="background: #FFFFFF;">
+				<td>
+					<label><i>S</i>(<i>m</i>, <i>1</i>)<i>+</i><i>S</i>(<i>m</i>, <i>2</i>)<i>+</i><i>...</i><i>+</i><i>S</i>(<i>m</i>, <i>n</i>)</label>
+				</td>
+				<td>
+					<span id="resStirling_b"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickStir_b()">Stirling of the second kind</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					yes
+				</td>
+				<td align="left">
+					<i>m</i> distinct objects onto 1, 2, ..., <i>n</i> identical containers, leaving no container empty <i>S</i>(<i>m</i>, <i>1</i>)<i>+</i><i>S</i>(<i>m</i>, <i>2</i>)<i>+</i><i>...</i><i>+</i><i>S</i>(<i>m</i>, <i>n</i>)
+				</td>
+			</tr>
+			<tr style="background: #EBEBEB;">
+				<td>
+					<label><i>S</i>(<i>m</i>, <i>n</i>)</label>
+				</td>
+				<td>
+					<span id="resStirling_b_2"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickStir_b_2()">Stirling</button>
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					<i>m</i> distinct objects onto <i>n</i> identical containers, leaving no container empty
+				</td>
+			</tr>
+			<tr style="background: #FFFFFF;">
+				<td>
+					<label>
+						\[
+        				\binom{m+n-1}{m}
+        				\]
+					</label>
+				</td>
+				<td>
+					<span id="resStarsBars"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickStar()">Stars and Bars Theorem</button>
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					yes
+				</td>
+				<td align="left">
+					Ordering food from the view of kitchen (<i>m</i> kids (identical), <i>n</i> foods (distinct)); <i>m</i> identical pennies into <i>n</i> distinct container; nonnegative integer solutions for an equation
+				</td>
+			</tr>
+			<tr style="background: #EBEBEB;">
+				<td>
+					<label>
+						\[
+						{\small \binom{m-1}{m-n} = \binom{m-1}{n-1} = \binom{(m-n)-1}{m-n}}
+        				\]
+					</label>
+				</td>
+				<td>
+					<span id="resSurjective"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickSurj()">Surjective Mapping</button>
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					yes
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					Deliver one object to each of the <i>n</i> distinct containers first, then distribute <i>m - n</i> objects to the <i>n</i> containers
+				</td>
+			</tr>
+			<tr style="background: #FFFFFF;">
+				<td>
+					<label>
+						\[
+						{\small \begin{cases} 
+						p(m) & \text{for } n = m \\ 
+						p(m, 1) + p(m, 2) + \dots + p(m, n)^+ & \text{for } n < m
+						\end{cases}}
+						\]
+					</label>
+				</td>
+				<td>
+					<span id="resPartition"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickPart()">Partition</button>
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					yes
+				</td>
+				<td align="left">
+					Partition integer <i>m</i> into at most <i>n</i> summands (with some 0 summands, corresponding to empty containers)
+				</td>
+			</tr>
+			<tr style="background: #EBEBEB;">
+				<td>
+					<label>
+						\[
+						p(m, n)
+						\]
+					</label>
+				</td>
+				<td>
+					<span id="resPartitionNoEmpty"></span>
+				</td>
+				<td>
+					<button type="button" onclick="clickPartNo()">Partition without Empty</button>
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					no
+				</td>
+				<td>
+					no
+				</td>
+				<td align="left">
+					Partition integer <i>m</i> into exactly <i>n</i> summands (with no container empty)
+				</td>
+			</tr>
+		</table>
+		<!-- <button id="fireworkButton">Trigger Fireworks</button> -->
+		
+		<!-- The <script> tag is used to define a client-side script (JavaScript).
+			 The <script> element either contains scripting statements, or it points to an external script file through the src attribute.
+		-->
+		<script>
+		// <script type="text/javascript">
+			function Factorial(n)
+			{	fact = 1;
+				for (i=2; i<=n; i++)
+					fact *= i;
+				return fact;
+			}
+			function Perm(n, r)
+			{	perm = n;
+				for (i=n-1; i>n-r; i--)
+					perm *= i;
+				return perm;
+			}
+			function Comb(n, r)
+			{	return Perm(n, r) / Factorial(r);
+			}	
+			function invalid(n, r)
+			{	if (parseInt(n) < 0 || isNaN(parseInt(n)))
+				{	document.getElementById("n").focus();
+					alert("Invalid inputs. Ensure that 1 <= n.");
+					return true;
+				}
+				else if (parseInt(r) < 0 || isNaN(parseInt(r)))
+				{	document.getElementById("r").focus();
+					alert("Invalid inputs. Ensure that 1 <= r.");
+					return true;
+				}
+				else if (parseInt(r) > parseInt(n))
+				{	document.getElementById("r").focus();
+					document.getElementById("n").focus();
+					alert("Invalid inputs. Ensure that r <= n.");
+					return true;
+				}
+				return false;
+			}
+			// m
+			function invalid_m(m)
+			{	if (parseInt(m) < 1 || isNaN(parseInt(m)))
+				{	document.getElementById("m").focus();
+					alert("Invalid inputs in Eulerian. Ensure that 1 <= m.");
+					return true;
+				}
+				return false;
+			}
+			// m, n
+			function invalid_mn(m, n)
+			{	if (parseInt(m) < 1 || isNaN(parseInt(m)))
+				{	document.getElementById("m").focus();
+					return true;
+					alert("Invalid inputs in Stirling. Ensure that 1 <= m.");
+				}
+				if (parseInt(n) < 1 || isNaN(parseInt(n)))
+				{	document.getElementById("n").focus();
+					alert("Invalid inputs in Stirling. Ensure that 1 <= n.");
+					return true;
+				}
+				if (parseInt(n) > parseInt(m))
+				{	document.getElementById("m").focus();
+					document.getElementById("n").focus();
+					alert("Invalid inputs in Stirling. Ensure that n <= m.");
+					return true;
+				}
+				return false;
+			}
+			// m, n bonus
+			function invalid_mn_bonus(m, n)
+			{	if (parseInt(m) < 0 || isNaN(parseInt(m)))
+				{	document.getElementById("m").focus();
+					alert("Invalid inputs in BONUS. Ensure that 0 <= m.");
+					return true;
+				}
+				if (parseInt(n) < 0 || isNaN(parseInt(n)))
+				{	document.getElementById("n").focus();
+					alert("Invalid inputs in BONUS. Ensure that 0 <= n.");
+					return true;
+				}
+				return false;
+			}
+			
+			// compute Catalan
+			function Catalan(n) {
+				return Factorial(2 * n) / (Factorial(n + 1) * Factorial(n));
+			}
+
+			// compute Triangular
+			function Triangular(n) {
+				return (n * (n + 1)) / 2;
+			}
+
+			// compute Harmonic
+			function Harmonic(n) {
+				let result = 0;
+				for (let i = 1; i <= n; i++) {
+					result += 1 / i; // Add the reciprocal of each integer up to n
+				}
+				return result;
+			}
+			// compute Fibonacci
+			function Fibonacci(n) {
+				let fib = [0, 1]; // Initial Fibonacci sequence
+				if (n <= 0) return [];
+				if (n === 1) return [0];
+				for (let i = 2; i < n; i++) {
+					fib.push(fib[i - 1] + fib[i - 2]); // Add the sum of the previous two numbers
+				}
+				return fib.slice(0, n); // Return only the first `n` numbers
+			}
+			// compute Lucas
+			function Lucas(n) {
+				let lucas = [2, 1]; // Initial Lucas sequence
+				if (n <= 0) return [];
+				if (n === 1) return [2];
+				for (let i = 2; i < n; i++) {
+					lucas.push(lucas[i - 1] + lucas[i - 2]); // Add the sum of the previous two numbers
+				}
+				return lucas.slice(0, n); // Return only the first `n` numbers
+			}
+
+			// compute Eulerian
+			function eulerian(m, k) {
+				// if (k < 0 || k >= m) return 0; // Out of range
+				if (m === 0 && k === 0) return 1; // Base case
+				if (k < 0 || k >= m) return 0;
+				return (k + 1) * eulerian(m - 1, k) + (m - k) * eulerian(m - 1, k - 1);
+			}
+			function computeEulerianNumbers(m) {
+				let eulerianNumbers = [];
+				for (let k = 0; k < m; k++) {
+					eulerianNumbers.push(eulerian(m, k));
+				}
+				return eulerianNumbers;
+			}
+			// compute Stirling
+			function stirling(m, n) {
+				if (m === 0 && n === 0) return 1;
+				if (n > m || n <= 0) return 0; // Out of range
+            	// if (m === 0 && n === 0) return 1; // Base case
+           		if (m === 0 || n === 0) return 0; // Invalid cases
+				return n * stirling(m - 1, n) + stirling(m - 1, n - 1);
+			}
+			function calculateStirling(m, n) {
+				let stirlingNumbers = [];
+				for (let i = 1; i <= n; i++) {
+					stirlingNumbers.push(stirling(m, i));
+				}
+				return stirlingNumbers;
+			}
+
+			// Cartesian
+			function Cartesian(n, m) {
+				return Math.pow(n, m);
+			}
+			// Onto
+			function Onto(m, n) {
+				const stir = stirling(m, n);
+    			const fact = Factorial(n);
+   				 return stir * fact;
+			}
+			// Stars and Bars Theorem
+			function StarsBars(m, n) {
+				const total = m + n - 1;
+           		return Comb(total, m);
+			}
+			// Surjective
+			function Surjective(m, n) {
+				return Comb(m-1, m-n);
+			}
+			// Partition
+			function Partition(m, n) {
+				if (n > m) return 0;
+				if (n === m) return 1;
+				if (n === 1) return 1;
+				return Partition(m - n, n) + Partition(m - 1, n - 1);
+			}
+			function computePartition(m, n) {
+				if (n === 0) return 0;
+				if (n === 1) return 1;
+				let total = 0;
+				for (let i = 1; i <= n; i++) {
+        			total += Partition(m, i);
+    			}
+				return total;
+			}
+			
+			function computeAll()
+			{	document.getElementById("resPermutation").innerHTML = "";
+				document.getElementById("resCombination").innerHTML = "";
+				document.getElementById("resArrangement").innerHTML = "";
+				document.getElementById("resSelectrofn").innerHTML = "";
+				document.getElementById("resCatalan").innerHTML = "";
+				document.getElementById("resTriangular").innerHTML = "";
+				document.getElementById("resHarmonic").innerHTML = "";
+				document.getElementById("resFibonacci").innerHTML = "";
+				document.getElementById("resLucas").innerHTML = "";
+				document.getElementById("resEulerian").innerHTML = "";
+				document.getElementById("resStirling").innerHTML = "";
+				n = document.getElementById("n").value;
+				r = document.getElementById("r").value;
+				m = document.getElementById("m").value;
+				if (invalid(n, r)) return;
+				if (invalid_m(m)) return;
+				if (invalid_mn(m, n)) return;
+				clickPerm();
+				clickComb();
+				clickArra();
+				clickSele();
+				clickCata();
+				clickTria();
+				clickHarm();
+				clickFibo();
+				clickLuca();
+				clickEule();
+				clickStir();
+			}
+			function computeAll_bonus()
+			{	document.getElementById("resCartesian").innerHTML = "";
+			 	document.getElementById("resOnto").innerHTML = "";
+				document.getElementById("resStirling_b").innerHTML = "";
+				document.getElementById("resStirling_b_2").innerHTML = "";
+				document.getElementById("resStarsBars").innerHTML = "";
+				document.getElementById("resSurjective").innerHTML = "";
+				document.getElementById("resPartition").innerHTML = "";
+				document.getElementById("resPartitionNoEmpty").innerHTML = "";
+				n = document.getElementById("n_b").value;
+				m = document.getElementById("m_b").value;
+				if (invalid_mn_bonus(m, n)) return;
+				clickCart();
+				clickOnto();
+				clickStir_b();
+				clickStir_b_2();
+				clickStar();
+				clickSurj();
+				clickPart();
+				clickPartNo();
+			}
+			
+			function clickPerm()
+			{	document.getElementById("resPermutation").innerHTML = "";
+				n = document.getElementById("n").value;
+				r = document.getElementById("r").value;
+				if (invalid(n, r)) return;
+				document.getElementById("resPermutation").innerHTML = Perm(n, r);
+			}
+			
+			function clickComb()
+			{	document.getElementById("resCombination").innerHTML = "";
+				n = document.getElementById("n").value;
+				r = document.getElementById("r").value;										
+				if (invalid(n, r)) return;				
+				document.getElementById("resCombination").innerHTML = Comb(n, r);
+			}
+			
+			function clickArra()
+			{	document.getElementById("resArrangement").innerHTML = ""
+				n = document.getElementById("n").value;
+				r = document.getElementById("r").value;
+				if (invalid(n, r)) return;				
+				document.getElementById("resArrangement").innerHTML = Math.pow(n, r);
+			}
+			
+			function clickSele()
+			{	document.getElementById("resSelectrofn").innerHTML = "";
+				n = parseInt(document.getElementById("n").value);
+				r = parseInt(document.getElementById("r").value);
+				if (invalid(n, r)) return;
+				document.getElementById("resSelectrofn").innerHTML = Comb(n + r - 1, r);
+			}
+			// Catalan
+			function clickCata() {
+				document.getElementById("resCatalan").innerHTML = "";
+				n = parseInt(document.getElementById("n").value);
+				r = parseInt(document.getElementById("r").value);
+				if (invalid(n, r)) return;
+				document.getElementById("resCatalan").innerHTML = Catalan(n);
+			}
+			// Triangular
+			function clickTria() {
+				document.getElementById("resTriangular").innerHTML = "";
+				n = parseInt(document.getElementById("n").value);
+				r = parseInt(document.getElementById("r").value);
+				if (invalid(n, r)) return;
+				document.getElementById("resTriangular").innerHTML = Triangular(n);
+			}
+			// Harmonic
+			function clickHarm() {
+				document.getElementById("resHarmonic").innerHTML = "";
+				n = parseInt(document.getElementById("n").value);
+				r = parseInt(document.getElementById("r").value);
+				if (invalid(n, r)) return;
+				document.getElementById("resHarmonic").innerHTML = Harmonic(n);
+			}
+			// Fibonacci
+			function clickFibo() {
+				document.getElementById("resFibonacci").innerHTML = "";
+				n = parseInt(document.getElementById("n").value);
+				r = parseInt(document.getElementById("r").value);
+				if (invalid(n, r)) return;
+				document.getElementById("resFibonacci").innerHTML = Fibonacci(n);
+			}
+			// Lucas
+			function clickLuca() {
+				document.getElementById("resLucas").innerHTML = "";
+				n = parseInt(document.getElementById("n").value);
+				r = parseInt(document.getElementById("r").value);
+				if (invalid(n, r)) return;
+				document.getElementById("resLucas").innerHTML = Lucas(n);
+			}
+
+			// Eulerian
+			function clickEule() {
+				document.getElementById("resEulerian").innerHTML = "";
+				m = parseInt(document.getElementById("m").value);
+				// k = parseInt(document.getElementById("k").value);
+				if (invalid_m(m)) return;
+				document.getElementById("resEulerian").innerHTML = computeEulerianNumbers(m);
+			}
+			// Stirling
+			function clickStir() {
+				document.getElementById("resStirling").innerHTML = "";
+				m = parseInt(document.getElementById("m").value);
+				n = parseInt(document.getElementById("n").value);
+				if (invalid_mn(m, n)) return;
+				document.getElementById("resStirling").innerHTML = calculateStirling(m, n);
+			}
+
+			// Cartesian
+			function clickCart() {
+				document.getElementById("resCartesian").innerHTML = "";
+				m = parseInt(document.getElementById("m_b").value);
+				n = parseInt(document.getElementById("n_b").value);
+				if (invalid_mn_bonus(m, n)) return;
+				document.getElementById("resCartesian").innerHTML = Cartesian(n, m);
+			}
+			// Onto
+			function clickOnto() {
+				document.getElementById("resOnto").innerHTML = "";
+				m = parseInt(document.getElementById("m_b").value);
+				n = parseInt(document.getElementById("n_b").value);
+				if (invalid_mn_bonus(m, n)) return;
+				document.getElementById("resOnto").innerHTML = Onto(m, n);
+			}
+			// Stirling of the second kind
+			function clickStir_b() {
+				document.getElementById("resStirling_b").innerHTML = "";
+				m = parseInt(document.getElementById("m_b").value);
+				n = parseInt(document.getElementById("n_b").value);
+				if (invalid_mn_bonus(m, n)) return;
+				document.getElementById("resStirling_b").innerHTML = calculateStirling(m, n);
+			}
+			// Stirling in BONUS
+			function clickStir_b_2() {
+				document.getElementById("resStirling_b_2").innerHTML = "";
+				m = parseInt(document.getElementById("m_b").value);
+				n = parseInt(document.getElementById("n_b").value);
+				if (invalid_mn_bonus(m, n)) return;
+				document.getElementById("resStirling_b_2").innerHTML = stirling(m, n);
+			}
+			// Stars and Bars Theorem
+			function clickStar() {
+				document.getElementById("resStarsBars").innerHTML = "";
+				m = parseInt(document.getElementById("m_b").value);
+				n = parseInt(document.getElementById("n_b").value);
+				if (invalid_mn_bonus(m, n)) return;
+				document.getElementById("resStarsBars").innerHTML = StarsBars(m, n);
+			}
+			// Surjective
+			function clickSurj() {
+				document.getElementById("resSurjective").innerHTML = "";
+				m = parseInt(document.getElementById("m_b").value);
+				n = parseInt(document.getElementById("n_b").value);
+				if (invalid_mn_bonus(m, n)) return;
+				document.getElementById("resSurjective").innerHTML = Surjective(m, n);
+			}
+			// Partition
+			function clickPart() {
+				document.getElementById("resPartition").innerHTML = "";
+				m = parseInt(document.getElementById("m_b").value);
+				n = parseInt(document.getElementById("n_b").value);
+				if (invalid_mn_bonus(m, n)) return;
+				document.getElementById("resPartition").innerHTML = computePartition(m, n);
+			}
+			// Partition without empty
+			function clickPartNo() {
+				document.getElementById("resPartitionNoEmpty").innerHTML = "";
+				m = parseInt(document.getElementById("m_b").value);
+				n = parseInt(document.getElementById("n_b").value);
+				if (invalid_mn_bonus(m, n)) return;
+				document.getElementById("resPartitionNoEmpty").innerHTML = Partition(m, n);
+			}
+
+			function createFireworks(button) {
+				const container = document.body;
+				const fireworksCount = 60;
+				const buttonRect = button.getBoundingClientRect();
+				const scrollX = window.scrollX;
+				const scrollY = window.scrollY;
+
+				for (let i = 0; i < fireworksCount; i++) {
+					const firework = document.createElement("div");
+					firework.className = "firework";
+
+					const angle = Math.random() * 2 * Math.PI;
+					const distance = Math.random() * 150 + 100;
+					const x = Math.cos(angle) * distance;
+					const y = Math.sin(angle) * distance;
+
+					firework.style.setProperty("--x", `${x}px`);
+					firework.style.setProperty("--y", `${y}px`);
+
+					firework.style.left = `${buttonRect.left + buttonRect.width / 2 + scrollX}px`;
+					firework.style.top = `${buttonRect.top + buttonRect.height / 2 + scrollY}px`;
+
+					container.appendChild(firework);
+
+					firework.addEventListener("animationend", () => {
+						firework.remove();
+					});
+				}
+			}
+		</script>
+	</body>
+</html>
